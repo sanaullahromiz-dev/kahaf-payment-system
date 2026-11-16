@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>গ্রাহককে ফাইল পাঠান</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center min-vh-100 py-4">
+    <div class="card p-4 w-100 shadow-lg" style="max-width: 600px; border-radius: 15px; border: none;">
+        <div class="text-center border-bottom pb-3 mb-4">
+            <h3 class="fw-bold text-primary mb-0">Kahaf Computer</h3>
+            <span class="text-muted small">"গ্রাহককে ফাইল প্রজেক্ট পাঠান"</span>
+        </div>
+
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-{{ m.tags }} fw-bold">{{ m }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- ফাইল আপলোডের জন্য enctype="multipart/form-data" দেওয়া বাধ্যতামূলক -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label fw-bold">গ্রাহক নির্বাচন করুন</label>
+                <select name="customer" class="form-select" required>
+                    <option value="">-- কোন গ্রাহককে পাঠাবেন তা নির্বাচন করুন --</option>
+                    {% for c in customers %}
+                        <option value="{{ c.id }}">{{ c.name }} (আইডি: {{ c.registration_id }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">প্রজেক্ট/ফাইলের নাম</label>
+                <input type="text" name="title" class="form-control" placeholder="যেমন: Final Project Design" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">ফাইল যুক্ত করুন (PDF, ZIP, Image ইত্যাদি)</label>
+                <input type="file" name="file" class="form-control border-primary" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 fw-bold py-2 fs-5">🚀 ফাইল পাঠান</button>
+            <a href="{% url 'custom_admin_dashboard' %}" class="btn btn-outline-secondary w-100 mt-3">এডমিন প্যানেলে ফিরে যান</a>
+        </form>
+    </div>
+</body>
+</html>

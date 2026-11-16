@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>প্রোডাক্ট বিক্রি করুন</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card p-4 shadow-lg w-100" style="max-width: 600px; border-radius: 15px;">
+        <div class="text-center border-bottom pb-3 mb-3">
+            <h3 class="fw-bold text-primary mb-0">Kahaf Computer</h3>
+            <span class="text-muted small">With Software Developer | "Empowering Your Digital Future"</span>
+        </div>
+        
+        <h5 class="fw-bold text-center mb-4 text-success">বিক্রি রশিদ তৈরি করুন</h5>
+
+        {% if messages %}
+            {% for m in messages %}<div class="alert alert-success">{{ m }}</div>{% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="fw-bold">সেলার রশিদ নং</label>
+                <input type="text" name="receipt_no" class="form-control" placeholder="যেমন: 001" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="fw-bold">গ্রাহকের নাম নির্বাচন করুন</label>
+                <select id="customer_select" name="customer" class="form-select" required>
+                    <option value="">-- গ্রাহক নির্বাচন করুন --</option>
+                    {% for c in customers %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row g-2 mb-3 text-muted small">
+                <div class="col-6">মোবাইল: <strong id="c_mobile">...</strong></div>
+                <div class="col-6">আইডি: <strong id="c_id">...</strong></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold">প্রোডাক্ট/সার্ভিসের নাম</label>
+                <select name="product" class="form-select" required>
+                    {% for p in products %}
+                        <option value="{{ p.id }}">{{ p.name }} (৳{{ p.price }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                    <label class="fw-bold">মোট মূল্য</label>
+                    <input type="number" step="0.01" name="total_amount" class="form-control" required>
+                </div>
+                <div class="col-6">
+                    <label class="fw-bold">পরিশোধের ধরন</label>
+                    <select name="payment_type" class="form-select" required>
+                        <option value="One-time">এককালীন</option>
+                        <option value="Monthly">মাসিক</option>
+                        <option value="Yearly">বাৎসরিক</option>
+                    </select>
+                </div>
+            </div>
+
+            <p class="text-center text-info small my-3">"আমাদের মানি রশিদ রিসিভ করে আপনার পেমেন্ট নিশ্চিত করার অনুরোধ রইল"</p>
+            
+            <!-- 🎯 নতুন যুক্ত করা বাটনগুলো -->
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary w-50 fw-bold">রশিদ সেভ ও পাঠান</button>
+                <a href="{% url 'receipt_list' %}" class="btn btn-warning w-50 fw-bold">রশিদ দেখুন</a>
+            </div>
+            
+            <a href="{% url 'custom_admin_dashboard' %}" class="btn btn-link w-100 text-decoration-none mt-3 text-center d-block">এডমিন প্যানেলে ফিরে যান</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('customer_select').addEventListener('change', function() {
+            let id = this.value;
+            if(id) {
+                fetch(`/admin-panel/api/customer/${id}/`)
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        document.getElementById('c_mobile').innerText = data.mobile;
+                        document.getElementById('c_id').innerText = data.reg_id;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

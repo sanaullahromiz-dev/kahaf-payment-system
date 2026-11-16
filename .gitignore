@@ -1,0 +1,9 @@
+# ignore 
+venv/ 
+.venv/ 
+__pycache__/ 
+*.pyc 
+staticfiles/ 
+media/ 
+.env
+*.mp4

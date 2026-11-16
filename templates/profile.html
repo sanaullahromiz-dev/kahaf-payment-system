@@ -1,0 +1,1050 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Customer Dashboard - Kahaf Computer</title>
+    
+    <!-- Bootstrap 5 & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts (English & Crisp Bangla Support) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="{% static 'admin.png' %}?v=2">
+    
+    <style>
+        :root {
+            --primary-dark: #0f172a;
+            --primary-blue: #1e3a8a;
+            --accent-cyan: #06b6d4;
+            --bg-app: #eef2f6;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body { 
+            background-color: var(--bg-app); 
+            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* 📱 Mobile-First App Container */
+        .app-shell {
+            max-width: 560px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: #f8fafc;
+            box-shadow: 0 0 35px rgba(15, 23, 42, 0.08);
+            padding-bottom: 95px;
+            position: relative;
+        }
+
+        /* 🌟 Sticky Top App Bar */
+        .brand-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #ffffff;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            border-bottom: 2px solid rgba(6, 182, 212, 0.4);
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 3px;
+            flex-shrink: 0;
+        }
+
+        .brand-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 0;
+            color: #fff;
+        }
+
+        .brand-subtitle {
+            font-size: 0.72rem;
+            color: #67e8f9;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* 🌐 Language Toggle Pill */
+        .lang-switch-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .lang-switch-btn:hover, .lang-switch-btn:active {
+            background: #06b6d4;
+            color: #0f172a;
+            border-color: #06b6d4;
+        }
+
+        .header-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: 0.2s;
+            border: none;
+        }
+
+        .header-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        /* 🪪 Digital Customer ID Card */
+        .id-card { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #0284c7 100%); 
+            color: white; 
+            border-radius: 20px; 
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.25);
+        }
+
+        .id-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            pointer-events: none;
+        }
+
+        .id-card::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -30px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            pointer-events: none;
+        }
+
+        .profile-img { 
+            width: 74px; 
+            height: 74px; 
+            object-fit: cover; 
+            border-radius: 50%; 
+            border: 3px solid rgba(255, 255, 255, 0.9); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .id-badge {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(4px);
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        /* 📲 PWA App Install Banner */
+        .app-banner {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fcd34d;
+            border-left: 5px solid #f59e0b;
+            border-radius: 16px;
+            padding: 14px 16px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12);
+        }
+
+        /* 🎯 Mobile 2x2 Quick Action Grid */
+        .action-tile {
+            border-radius: 18px;
+            border: none;
+            padding: 16px 10px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-decoration: none;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+
+        .action-tile:active {
+            transform: scale(0.96);
+        }
+
+        .action-icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .tile-buy {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #ffffff;
+        }
+
+        .tile-receipt {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: #ffffff;
+        }
+
+        .tile-pay {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: #ffffff;
+        }
+
+        .tile-due {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            color: #ffffff;
+        }
+
+        .tile-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        /* 📦 Section Cards */
+        .app-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 18px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+            margin-bottom: 16px;
+        }
+
+        .section-heading {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control-app, .form-select-app {
+            border-radius: 12px;
+            padding: 11px 14px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.92rem;
+            background-color: #f8fafc;
+        }
+
+        .form-control-app:focus, .form-select-app:focus {
+            background-color: #ffffff;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+
+        /* 📂 Mobile-Friendly File Item */
+        .file-item-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        /* 💬 Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 18px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: #ffffff;
+            border-radius: 50px;
+            font-size: 14px;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            padding: 11px 18px;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.2s ease;
+        }
+
+        .whatsapp-float:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* 🔔 Bell Pulse Animation */
+        @keyframes pulseRing {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .bell-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            border: 2px solid #0f172a;
+            animation: pulseRing 1.8s infinite;
+        }
+
+        /* 🛒 Buy Modal Choice Buttons */
+        .choice-card-btn {
+            border-radius: 16px;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            text-decoration: none;
+            color: #0f172a;
+        }
+        .choice-card-btn:hover, .choice-card-btn.active-choice {
+            border-color: #059669;
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        .choice-icon-box {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- 🌟 Top App Header -->
+    <header class="brand-header">
+        <div class="d-flex justify-content-between align-items-center gap-2">
+            <!-- Brand Logo & Name -->
+            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                <img src="{% static 'admin.png' %}?v=2" alt="Logo" class="brand-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5404/5404900.png'">
+                <div class="text-truncate">
+                    <h1 class="brand-title text-truncate">Kahaf Computer</h1>
+                    <span class="brand-subtitle text-truncate" data-en="Software & IT Solutions" data-bn="সফটওয়্যার ও আইটি সলিউশন">Software & IT Solutions</span>
+                </div>
+            </div>
+
+            <!-- Right Controls: Language Toggle, Bell, Logout -->
+            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                <!-- Language Switcher Button -->
+                <button type="button" id="langToggleBtn" class="lang-switch-btn" title="Change Language">
+                    <i class="fa-solid fa-language"></i>
+                    <span id="langBtnText">বাংলা</span>
+                </button>
+
+                <!-- Notification Bell -->
+                <button type="button" class="header-icon-btn position-relative" data-bs-toggle="modal" data-bs-target="#notificationModal" aria-label="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    {% if has_new_receipt %}
+                        <span class="bell-dot"></span>
+                    {% endif %}
+                </button>
+
+                <!-- Logout Button -->
+                <a href="{% url 'logout' %}" class="header-icon-btn bg-danger bg-opacity-75" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 📱 Main App Content -->
+    <div class="px-3 pt-3">
+
+        <!-- 🌟 Django Messages / Alerts -->
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-success alert-dismissible fade show text-center fw-semibold rounded-4 shadow-sm mb-3 py-2 px-3 small">
+                    {{ m }}
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- 🎯 Add Mobile App Banner (PWA) -->
+        <div id="pwaInstallBanner" class="app-banner mb-3">
+            <div class="d-flex align-items-center justify-content-between gap-2">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-warning bg-opacity-25 text-warning rounded-3 p-2 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; flex-shrink: 0;">
+                        <i class="fa-solid fa-mobile-screen-button fs-4 text-dark"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold text-dark mb-0" style="font-size: 0.9rem;" data-en="Install Mobile App" data-bn="মোবাইল অ্যাপ ইনস্টল করুন">Install Mobile App</h6>
+                        <small class="text-secondary d-block" style="font-size: 0.75rem;" data-en="Add logo icon to your phone home screen" data-bn="সহজ ব্যবহারের জন্য হোমস্ক্রিনে লোগো যুক্ত করুন">Add logo icon to your phone home screen</small>
+                    </div>
+                </div>
+                <button type="button" id="pwaInstallBtn" class="btn btn-warning text-dark btn-sm rounded-pill fw-bold px-3 py-2 shadow-sm flex-shrink-0" style="font-size: 0.8rem;">
+                    <i class="fa-solid fa-download me-1"></i>
+                    <span data-en="Add App" data-bn="অ্যাপ যুক্ত করুন">Add App</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 🪪 Customer Digital ID Card -->
+        <div class="id-card mb-3">
+            <div class="d-flex align-items-center gap-3 position-relative" style="z-index: 2;">
+                {% if profile.photo %}
+                    <img src="{{ profile.photo.url }}" class="profile-img" alt="Profile Picture">
+                {% else %}
+                    <div class="profile-img bg-white text-primary d-flex align-items-center justify-content-center fw-bold fs-2">
+                        {{ profile.name|first }}
+                    </div>
+                {% endif %}
+                <div class="overflow-hidden">
+                    <span class="id-badge">
+                        <span data-en="ID:" data-bn="আইডি:">ID:</span> <strong>{{ profile.registration_id }}</strong>
+                    </span>
+                    <h5 class="fw-bold mb-1 text-white text-truncate">{{ profile.name }}</h5>
+                    <div class="small text-white text-opacity-90">
+                        <i class="fa-solid fa-phone-volume me-1"></i>
+                        <span data-en="Mobile:" data-bn="মোবাইল:">Mobile:</span> {{ profile.mobile_number }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🧾 Animated GIF Banner -->
+        <div class="text-center mb-3">
+            <img src="{% static 'seller.gif' %}" alt="Seller Animation" class="img-fluid rounded-4 shadow-sm" style="max-height: 135px; width: 100%; object-fit: cover;" onerror="this.style.display='none'">
+        </div>
+
+        <!-- 📱 2x2 Quick Action Grid (Mobile App Style) -->
+        <div class="row g-2 mb-3">
+            <!-- 1. Buy New Product (Opens Smart Order Popup Modal) -->
+            <div class="col-6">
+                <button type="button" class="action-tile tile-buy w-100" data-bs-toggle="modal" data-bs-target="#buyProductModal">
+                    <div class="action-icon-circle">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <span class="tile-label" data-en="Buy New Product" data-bn="নতুন প্রোডাক্ট কিনুন">Buy New Product</span>
+                </button>
+            </div>
+
+            <!-- 2. View Receipts -->
+            <div class="col-6">
+                <button type="button" class="action-tile tile-receipt w-100" data-bs-toggle="modal" data-bs-target="#receiptModal">
+                    <div class="action-icon-circle">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <span class="tile-label" data-en="View Receipts" data-bn="পেমেন্ট রশিদ দেখুন">View Receipts</span>
+                </button>
+            </div>
+
+            <!-- 3. Make Payment -->
+            <div class="col-6">
+                <a href="{% url 'make_payment' %}" class="action-tile tile-pay">
+                    <div class="action-icon-circle">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+                    <span class="tile-label" data-en="Make Payment" data-bn="পেমেন্ট করুন">Make Payment</span>
+                </a>
+            </div>
+
+            <!-- 4. Due Warning -->
+            <div class="col-6">
+                <button type="button" class="action-tile tile-due w-100" data-bs-toggle="modal" data-bs-target="#dueModal">
+                    {% if dues %}
+                        <span class="position-absolute top-0 end-0 m-2 badge rounded-pill bg-danger border border-light shadow-sm">
+                            {{ dues|length }}
+                        </span>
+                    {% endif %}
+                    <div class="action-icon-circle">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <span class="tile-label" data-en="Due Warning" data-bn="বকেয়া সতর্কতা">Due Warning</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 🌟 Send File / Project Card -->
+        <div class="app-card">
+            <h6 class="section-heading text-primary">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span data-en="Send File / Project to Admin" data-bn="এডমিনকে ফাইল / প্রজেক্ট পাঠান">Send File / Project to Admin</span>
+            </h6>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="upload_file" value="1">
+                <div class="mb-2">
+                    <input type="text" name="title" class="form-control form-control-app" placeholder="Enter file title or description" data-en-placeholder="Enter file title or description" data-bn-placeholder="ফাইলের নাম বা বিবরণ লিখুন" required>
+                </div>
+                <div class="mb-3">
+                    <input type="file" name="file" class="form-control form-control-app" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold rounded-pill py-2 shadow-sm">
+                    <i class="fa-solid fa-paper-plane me-1"></i>
+                    <span data-en="Send File Now" data-bn="ফাইল পাঠান">Send File Now</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- 🌟 Shared Files & Projects List -->
+        <div class="app-card">
+            <h6 class="section-heading">
+                <i class="fa-solid fa-folder-open text-warning"></i>
+                <span data-en="Your Shared Files & Projects" data-bn="আপনার আদান-প্রদানকৃত ফাইলসমূহ">Your Shared Files & Projects</span>
+            </h6>
+
+            <div id="fileListContainer">
+                {% for f in customer_files %}
+                <div class="file-item-box {% if not forloop.first %}hidden-file d-none{% endif %}">
+                    <div class="overflow-hidden">
+                        <div class="fw-bold text-dark text-truncate" style="font-size: 0.92rem;">{{ f.title }}</div>
+                        <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
+                            {% if f.sender == 'admin' %}
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" style="font-size: 0.7rem;" data-en="From Admin" data-bn="এডমিন পাঠিয়েছেন">From Admin</span>
+                            {% else %}
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25" style="font-size: 0.7rem;" data-en="Sent by Me" data-bn="আপনি পাঠিয়েছেন">Sent by Me</span>
+                            {% endif %}
+                            <small class="text-muted" style="font-size: 0.75rem;"><i class="fa-regular fa-calendar me-1"></i>{{ f.created_at|date:"d M, Y" }}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                        <a href="{{ f.file.url }}" target="_blank" class="btn btn-sm btn-outline-success rounded-circle" style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;" title="View File">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <a href="{{ f.file.url }}" download class="btn btn-sm btn-outline-primary rounded-circle" style="width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;" title="Download File">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center text-muted py-3 small" data-en="No files or projects exchanged yet." data-bn="এখনো কোনো ফাইল বা প্রজেক্ট আদান-প্রদান হয়নি।">
+                    No files or projects exchanged yet.
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if customer_files|length > 1 %}
+            <div class="text-center mt-2">
+                <button type="button" id="toggleFilesBtn" class="btn btn-outline-primary btn-sm px-4 rounded-pill fw-semibold">
+                    <i class="fa-solid fa-list me-1"></i>
+                    <span id="toggleFilesText" data-en="View All Files" data-bn="সব ফাইল দেখুন">View All Files</span>
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- 🖥️ Business Intro Footer Card -->
+        <div class="rounded-4 p-4 text-white text-center shadow-sm mb-3" style="background: linear-gradient(135deg, #0f766e, #059669);">
+            <h6 class="fw-bold mb-2">
+                <i class="fa-solid fa-laptop-code me-1"></i>
+                <span data-en="About Our Services" data-bn="আমাদের সার্ভিস সম্পর্কে">About Our Services</span>
+            </h6>
+            <p class="small mb-2 opacity-95" data-en="We specialize in developing high-quality Mobile Apps, Custom Software, and Professional Websites tailored for any business or organization." data-bn="আমরা যেকোনো ব্যবসা বা প্রতিষ্ঠানের জন্য উন্নতমানের মোবাইল অ্যাপ, কাস্টম সফটওয়্যার এবং প্রফেশনাল ওয়েবসাইট তৈরি করে থাকি।">
+                We specialize in developing high-quality Mobile Apps, Custom Software, and Professional Websites tailored for any business or organization.
+            </p>
+            <p class="mb-3 opacity-85" style="font-size: 0.78rem;" data-en="With years of trusted experience, our official website is live online, and our mobile applications are active on the Google Play Store. Contact us directly for any software or web development services!" data-bn="দীর্ঘদিনের বিশ্বস্ত অভিজ্ঞতায় আমাদের অফিসিয়াল ওয়েবসাইট ও গুগল প্লে-স্টোরে মোবাইল অ্যাপ সচল রয়েছে। যেকোনো সফটওয়্যার বা ওয়েব সার্ভিসের জন্য সরাসরি যোগাযোগ করুন!">
+                With years of trusted experience, our official website is live online, and our mobile applications are active on the Google Play Store. Contact us directly for any software or web development services!
+            </p>
+            <hr class="my-2 opacity-25">
+            <div class="fw-bold small">Kahaf Computer With Software Creator</div>
+            <div class="mt-1" style="font-size: 0.8rem;">
+                <span data-en="Developer:" data-bn="ডেভেলপার:">Developer:</span> <strong>Sanaullah Ramiz 💝</strong>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 💬 Floating WhatsApp Button -->
+<a href="https://wa.me/message/H5OFP5WIMQMKE1" target="_blank" class="whatsapp-float">
+    <i class="fa-brands fa-whatsapp fs-5"></i>
+    <span data-en="Chat on WhatsApp" data-bn="হোয়াটসঅ্যাপে কথা বলুন">Chat on WhatsApp</span>
+</a>
+
+<!-- ================= Modals ================= -->
+
+<!-- 🛒 0. Buy New Product / Service Order Modal -->
+<div class="modal fade" id="buyProductModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable px-3">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header text-white rounded-top-4" style="background: linear-gradient(135deg, #059669, #10b981);">
+                <h6 class="modal-title fw-bold">
+                    <i class="fa-solid fa-cart-plus me-2"></i>
+                    <span data-en="Order New Product / Service" data-bn="নতুন প্রোডাক্ট / সার্ভিস অর্ডার করুন">Order New Product / Service</span>
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 bg-light">
+
+                <!-- Option 1: Choose Product Button -->
+                <button type="button" id="showProductDropdownBtn" class="choice-card-btn mb-3 shadow-sm">
+                    <div class="choice-icon-box bg-success bg-opacity-15 text-success">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold" style="font-size: 0.98rem;" data-en="Choose a Product" data-bn="প্রোডাক্ট বেছে নিন">প্রোডাক্ট বেছে নিন</div>
+                        <small class="text-muted d-block" style="font-size: 0.78rem;" data-en="Select from our apps, software & websites" data-bn="আমাদের সকল অ্যাপ, সফটওয়্যার ও ওয়েবসাইট থেকে পছন্দ করুন">আমাদের সকল অ্যাপ, সফটওয়্যার ও ওয়েবসাইট থেকে পছন্দ করুন</small>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-success"></i>
+                </button>
+
+                <!-- Expandable Product Dropdown & Order Form -->
+                <div id="productSelectionBox" class="card border-0 rounded-4 shadow-sm p-3 mb-3 d-none bg-white">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="place_order" value="1">
+                        
+                        <label class="form-label fw-bold text-dark small mb-2">
+                            <i class="fa-solid fa-box-open text-success me-1"></i>
+                            <span data-en="Select Your Desired Service:" data-bn="আপনার পছন্দের প্রোডাক্ট / সার্ভিস সিলেক্ট করুন:">আপনার পছন্দের প্রোডাক্ট / সার্ভিস সিলেক্ট করুন:</span>
+                        </label>
+                        
+                        <select name="selected_product" id="productSelectDropdown" class="form-select form-select-app fw-semibold text-dark mb-3" required>
+                            <option value="" selected disabled>-- প্রোডাক্ট / সার্ভিস নির্বাচন করুন --</option>
+                            
+                            <optgroup label="📱 মোবাইল অ্যাপস ডেভেলপমেন্ট">
+                                <option value="কাস্টম মোবাইল অ্যাপস তৈরি">👉 কাস্টম মোবাইল অ্যাপস তৈরি</option>
+                                <option value="লগইন সিস্টেম মোবাইল অ্যাপস তৈরি">👉 লগইন সিস্টেম মোবাইল অ্যাপস তৈরি</option>
+                                <option value="ওয়েব ভিউ অ্যাপস তৈরি">👉 ওয়েব ভিউ অ্যাপস তৈরি</option>
+                                <option value="মোবাইল অ্যাপ প্লে স্টোরে পাবলিশিং">👉 মোবাইল অ্যাপ প্লে স্টোরে পাবলিশিং</option>
+                            </optgroup>
+
+                            <optgroup label="💻 ম্যানেজমেন্ট সফটওয়্যার">
+                                <option value="কওমি মাদ্রাসা ম্যানেজমেন্ট সফটওয়্যার">👉 কওমি মাদ্রাসা ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="আলিয়া মাদ্রাসা ম্যানেজমেন্ট সফটওয়্যার">👉 আলিয়া মাদ্রাসা ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="স্কুল কলেজ ম্যানেজমেন্ট সফটওয়্যার">👉 স্কুল কলেজ ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="ফার্মেসি ম্যানেজমেন্ট সফটওয়্যার">👉 ফার্মেসি ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="মুদির দোকান ম্যানেজমেন্ট সফটওয়্যার">👉 মুদির দোকান ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="হাসপাতাল ম্যানেজমেন্ট সফটওয়্যার">👉 হাসপাতাল ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="হোটেল ম্যানেজমেন্ট সফটওয়্যার">👉 হোটেল ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="কর্পোরেট অফিস ম্যানেজমেন্ট সফটওয়্যার">👉 কর্পোরেট অফিস ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="সংগঠন সমিতি ম্যানেজমেন্ট সফটওয়্যার">👉 সংগঠন সমিতি ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="মসজিদ ম্যানেজমেন্ট সফটওয়্যার">👉 মসজিদ ম্যানেজমেন্ট সফটওয়্যার</option>
+                                <option value="দাতব্য প্রতিষ্ঠান/এনজিও ম্যানেজমেন্ট সফটওয়্যার">👉 দাতব্য প্রতিষ্ঠান/এনজিও ম্যানেজমেন্ট সফটওয়্যার</option>
+                            </optgroup>
+
+                            <optgroup label="🌐 ওয়েবসাইট ডেভেলপমেন্ট">
+                                <option value="লেন্ডিং পেইজ ওয়েবসাইট">👉 লেন্ডিং পেইজ ওয়েবসাইট</option>
+                                <option value="ই-কমার্স ওয়েবসাইট">👉 ই-কমার্স ওয়েবসাইট</option>
+                                <option value="ওয়ার্ডপ্রেস ওয়েবসাইট">👉 ওয়ার্ডপ্রেস ওয়েবসাইট</option>
+                                <option value="ম্যানেজমেন্ট ওয়েবসাইট">👉 ম্যানেজমেন্ট ওয়েবসাইট</option>
+                                <option value="পোর্টফোলিও ওয়েবসাইট">👉 পোর্টফোলিও ওয়েবসাইট</option>
+                                <option value="প্রাতিষ্ঠানিক ওয়েবসাইট">👉 প্রাতিষ্ঠানিক ওয়েবসাইট</option>
+                            </optgroup>
+
+                            <optgroup label="🚀 আমাদের রেডি অ্যাপস">
+                                <option value="TrustLink সংগঠন অ্যাপ">👉 TrustLink সংগঠন অ্যাপ</option>
+                                <option value="নরদীপ নরসিংদীর আ্যপ">👉 নরদীপ নরসিংদীর আ্যপ</option>
+                                <option value="ফারায়েজ ও ভূমি পরিমাপ আ্যপ">👉 ফারায়েজ ও ভূমি পরিমাপ আ্যপ</option>
+                                <option value="মাদ্রাসা আ্যপ">👉 মাদ্রাসা আ্যপ</option>
+                            </optgroup>
+                        </select>
+
+                        <!-- Notice & Order Submit Box (Shows when any product is selected) -->
+                        <div id="orderConfirmationNoticeBox" class="d-none">
+                            <div class="alert alert-warning border-warning rounded-3 p-3 mb-3 small text-dark" style="background-color: #fffbeb; line-height: 1.55;">
+                                <i class="fa-solid fa-circle-info text-warning me-1"></i>
+                                <span data-en="Clicking the Order Now button sends an order request message only. Your order will not be finalized until we discuss directly with you to confirm the contract. Thank you!" data-bn="আপনি 'এখনই অর্ডার করুন' বাটনে ক্লিক করলে এডমিনের কাছে অর্ডার অনুরোধ মেসেজ যাবে মাত্র। অর্ডার কনফার্ম হবে না, যতক্ষণ না আপনার সাথে সরাসরি আলোচনা করে কন্টাক্ট চূড়ান্ত করা হবে। ধন্যবাদ!">
+                                    আপনি 'এখনই অর্ডার করুন' বাটনে ক্লিক করলে এডমিনের কাছে অর্ডার অনুরোধ মেসেজ যাবে মাত্র। অর্ডার কনফার্ম হবে না, যতক্ষণ না আপনার সাথে সরাসরি আলোচনা করে কন্টাক্ট চূড়ান্ত করা হবে। ধন্যবাদ!
+                                </span>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 fw-bold rounded-pill py-2 shadow-sm">
+                                <i class="fa-solid fa-paper-plane me-2"></i>
+                                <span data-en="Order Now" data-bn="এখনই অর্ডার করুন">এখনই অর্ডার করুন</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Option 2: View Product Details Link -->
+                <a href="https://nor-kahaf.netlify.app/" target="_blank" class="choice-card-btn shadow-sm">
+                    <div class="choice-icon-box bg-primary bg-opacity-15 text-primary">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold" style="font-size: 0.98rem;" data-en="View Product Details" data-bn="প্রোডাক্টের বিস্তারিত দেখুন">প্রোডাক্টের বিস্তারিত দেখুন</div>
+                        <small class="text-muted d-block" style="font-size: 0.78rem;" data-en="Visit our portfolio & live demo showcase" data-bn="আমাদের ওয়েবসাইটে সকল প্রোডাক্টের বিস্তারিত ও ডেমো দেখুন">আমাদের ওয়েবসাইটে সকল প্রোডাক্টের বিস্তারিত ও ডেমো দেখুন</small>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-primary"></i>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 1. Notification Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered px-3">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header bg-primary text-white rounded-top-4">
+                <h6 class="modal-title fw-bold">
+                    <i class="fa-solid fa-bell me-2"></i>
+                    <span data-en="Notifications" data-bn="নোটিফিকেশন মেসেজ">Notifications</span>
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                {% if has_new_receipt %}
+                    <h5 class="mb-2 fw-bold text-success" data-en="Assalamu Alaikum Wa Rahmatullah" data-bn="আসসালামু আলাইকুম ওয়া রাহমাতুল্লাহ">Assalamu Alaikum Wa Rahmatullah</h5>
+                    <p class="small text-secondary mb-2" data-en="We are pleased to inform you that your payment receipt for your ordered product/service has been updated in your profile." data-bn="আনন্দের সাথে জানানো যাচ্ছে যে, আপনার অর্ডারকৃত প্রোডাক্ট/সার্ভিসের পেমেন্ট রশিদ আপনার প্রোফাইলে আপডেট করা হয়েছে।">
+                        We are pleased to inform you that your payment receipt for your ordered product/service has been updated in your profile.
+                    </p>
+                    <p class="fw-bold text-danger small mb-2" data-en="Please check your receipts modal." data-bn="দয়া করে আপনার পেমেন্ট রশিদ অপশনটি চেক করুন।">
+                        Please check your receipts modal.
+                    </p>
+                    <p class="mb-0 fw-bold text-dark" data-en="Thank You! 💝" data-bn="ধন্যবাদ! 💝">Thank You! 💝</p>
+                {% else %}
+                    <div class="py-3">
+                        <i class="fa-solid fa-bell-slash fs-1 text-muted mb-3 opacity-50"></i>
+                        <p class="text-muted mb-0 small" data-en="You have no new notifications." data-bn="আপনার কোনো নতুন নোটিফিকেশন নেই।">You have no new notifications.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Receipt Modal -->
+<div class="modal fade" id="receiptModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable px-2">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header bg-info text-white rounded-top-4">
+                <h6 class="modal-title fw-bold text-dark">
+                    <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                    <span data-en="Your Payment Receipts" data-bn="আপনার পেমেন্ট রশিদসমূহ">Your Payment Receipts</span>
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-3">
+                {% for r in receipts %}
+                <div class="card border-0 rounded-4 shadow-sm mb-3 border-start border-info border-4">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                            <span class="fw-bold text-dark small">
+                                <span data-en="Receipt:" data-bn="রশিদ নং:">Receipt:</span> <span class="text-primary">{{ r.receipt_no }}</span>
+                            </span>
+                            <small class="text-muted fw-semibold" style="font-size: 0.75rem;">{{ r.created_at|date:"d M, Y" }}</small>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted d-block" style="font-size: 0.72rem;" data-en="Product / Service" data-bn="প্রোডাক্ট / সার্ভিস">Product / Service</small>
+                            <strong class="text-dark" style="font-size: 0.92rem;">{{ r.product.name }}</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center bg-light p-2 rounded-3">
+                            <div>
+                                <small class="text-muted d-block" style="font-size: 0.7rem;" data-en="Method" data-bn="পেমেন্ট ধরন">Method</small>
+                                <strong class="text-dark small">{{ r.get_payment_type_display }}</strong>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-muted d-block" style="font-size: 0.7rem;" data-en="Total Amount" data-bn="মোট টাকা">Total Amount</small>
+                                <strong class="text-success fs-6">৳{{ r.total_amount }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-5 text-muted">
+                    <i class="fa-solid fa-box-open fs-1 mb-3 opacity-50"></i>
+                    <h6 data-en="No payment receipts available yet." data-bn="এখনো কোনো পেমেন্ট রশিদ তৈরি হয়নি।">No payment receipts available yet.</h6>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. Due Warning Modal -->
+<div class="modal fade" id="dueModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable px-2">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header bg-warning rounded-top-4">
+                <h6 class="modal-title fw-bold text-dark">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <span data-en="Due Payment Warning ⚠️" data-bn="বকেয়া পেমেন্ট সতর্কতা ⚠️">Due Payment Warning ⚠️</span>
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-3">
+                {% if dues %}
+                    <div class="alert alert-danger text-center fw-semibold border-danger rounded-3 shadow-sm mb-3 small" data-en="Please settle your pending balance to ensure uninterrupted services." data-bn="নিরবচ্ছিন্ন সার্ভিস পেতে দয়া করে আপনার বকেয়া টাকা পরিশোধ করুন।">
+                        Please settle your pending balance to ensure uninterrupted services.
+                    </div>
+                    
+                    {% for d in dues %}
+                    <div class="card border-danger rounded-4 shadow-sm mb-2">
+                        <div class="card-body p-3">
+                            <h6 class="fw-bold border-bottom border-danger pb-2 text-danger mb-2" style="font-size: 0.95rem;">{{ d.product }}</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted small"><span data-en="Type:" data-bn="ধরন:">Type:</span> <strong class="text-dark">{{ d.type }}</strong></span>
+                                <span class="fw-bold text-danger bg-danger bg-opacity-10 px-3 py-1 rounded-pill small">
+                                    <span data-en="Due:" data-bn="বকেয়া:">Due:</span> ৳{{ d.due }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="text-center mt-3">
+                        <a href="{% url 'make_payment' %}" class="btn btn-danger w-100 fw-bold shadow-sm rounded-pill py-2">
+                            <i class="fa-solid fa-credit-card me-2"></i>
+                            <span data-en="Pay Due Now" data-bn="এখনই বকেয়া পরিশোধ করুন">Pay Due Now</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4 text-success">
+                        <i class="fa-solid fa-circle-check fs-1 mb-2"></i>
+                        <h5 class="fw-bold" data-en="Congratulations!" data-bn="অভিনন্দন!">Congratulations!</h5>
+                        <p class="text-muted mb-0 small" data-en="You have no outstanding dues." data-bn="আপনার কোনো বকেয়া টাকা নেই।">You have no outstanding dues.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. Manual App Install Instruction Modal -->
+<div class="modal fade" id="manualInstallModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered px-3">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h6 class="modal-title fw-bold">
+                    <i class="fa-solid fa-mobile-screen me-2 text-warning"></i>
+                    <span data-en="Add App to Home Screen" data-bn="হোমস্ক্রিনে অ্যাপ যুক্ত করুন">Add App to Home Screen</span>
+                </h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="small text-secondary mb-3" data-en="Follow these simple steps to install our app icon on your phone screen:" data-bn="আপনার ফোনের হোমস্ক্রিনে আমাদের লোগোসহ অ্যাপটি যুক্ত করতে নিচের সহজ ধাপগুলো অনুসরণ করুন:">
+                    Follow these simple steps to install our app icon on your phone screen:
+                </p>
+                <div class="bg-light p-3 rounded-3 mb-2 small">
+                    <strong class="text-primary d-block mb-1" data-en="For Android (Chrome):" data-bn="অ্যান্ড্রয়েড ফোনের জন্য (Chrome):">For Android (Chrome):</strong>
+                    <span data-en="1. Tap the 3 dots (⋮) at the top-right corner of your browser." data-bn="১. ব্রাউজারের উপরে ডানপাশে ৩টি ডট (⋮) বাটনে ক্লিক করুন।">1. Tap the 3 dots (⋮) at the top-right corner of your browser.</span><br>
+                    <span data-en="2. Tap 'Add to Home screen' or 'Install App'." data-bn="২. 'Add to Home screen' অথবা 'Install App' অপশনে ক্লিক করুন।">2. Tap 'Add to Home screen' or 'Install App'.</span>
+                </div>
+                <div class="bg-light p-3 rounded-3 small">
+                    <strong class="text-dark d-block mb-1" data-en="For iPhone (Safari):" data-bn="আইফোনের জন্য (Safari):">For iPhone (Safari):</strong>
+                    <span data-en="1. Tap the 'Share' button at the bottom of Safari." data-bn="১. নিচের মাঝখানে 'Share' আইকনে ক্লিক করুন।">1. Tap the 'Share' button at the bottom of Safari.</span><br>
+                    <span data-en="2. Scroll down and tap 'Add to Home Screen'." data-bn="২. নিচে স্ক্রল করে 'Add to Home Screen' সিলেক্ট করুন।">2. Scroll down and tap 'Add to Home Screen'.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= Scripts ================= -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // 🛒 0. Buy Product Modal Interaction Logic
+        const showProductDropdownBtn = document.getElementById('showProductDropdownBtn');
+        const productSelectionBox = document.getElementById('productSelectionBox');
+        const productSelectDropdown = document.getElementById('productSelectDropdown');
+        const orderConfirmationNoticeBox = document.getElementById('orderConfirmationNoticeBox');
+
+        if (showProductDropdownBtn && productSelectionBox) {
+            showProductDropdownBtn.addEventListener('click', function() {
+                productSelectionBox.classList.toggle('d-none');
+                showProductDropdownBtn.classList.toggle('active-choice');
+            });
+        }
+
+        if (productSelectDropdown && orderConfirmationNoticeBox) {
+            productSelectDropdown.addEventListener('change', function() {
+                if (this.value !== "") {
+                    orderConfirmationNoticeBox.classList.remove('d-none');
+                } else {
+                    orderConfirmationNoticeBox.classList.add('d-none');
+                }
+            });
+        }
+
+        // 🌐 1. Bilingual Switcher Logic (English <-> Bangla)
+        let currentLang = localStorage.getItem('kahaf_dashboard_lang') || 'en';
+        let isShowingAllFiles = false;
+
+        const langToggleBtn = document.getElementById('langToggleBtn');
+        const langBtnText = document.getElementById('langBtnText');
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('kahaf_dashboard_lang', lang);
+            document.documentElement.lang = lang;
+
+            if (langBtnText) {
+                langBtnText.textContent = (lang === 'en') ? 'বাংলা' : 'English';
+            }
+
+            document.querySelectorAll('[data-en][data-bn]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${lang}`);
+            });
+
+            document.querySelectorAll('[data-en-placeholder][data-bn-placeholder]').forEach(input => {
+                input.placeholder = input.getAttribute(`data-${lang}-placeholder`);
+            });
+
+            const toggleFilesText = document.getElementById('toggleFilesText');
+            if (toggleFilesText) {
+                if (isShowingAllFiles) {
+                    toggleFilesText.textContent = (lang === 'en') ? 'Hide Other Files' : 'অন্যান্য ফাইল লুকান';
+                } else {
+                    toggleFilesText.textContent = (lang === 'en') ? 'View All Files' : 'সব ফাইল দেখুন';
+                }
+            }
+        }
+
+        applyLanguage(currentLang);
+
+        if (langToggleBtn) {
+            langToggleBtn.addEventListener('click', function() {
+                const newLang = (currentLang === 'en') ? 'bn' : 'en';
+                applyLanguage(newLang);
+            });
+        }
+
+        // 📂 2. File Toggle Logic
+        const toggleBtn = document.getElementById("toggleFilesBtn");
+        if (toggleBtn) {
+            toggleBtn.addEventListener("click", function() {
+                const hiddenFiles = document.querySelectorAll(".hidden-file");
+                isShowingAllFiles = false;
+
+                hiddenFiles.forEach(function(row) {
+                    if (row.classList.contains("d-none")) {
+                        row.classList.remove("d-none");
+                        isShowingAllFiles = true; 
+                    } else {
+                        row.classList.add("d-none");
+                    }
+                });
+
+                const toggleFilesText = document.getElementById("toggleFilesText");
+                if (isShowingAllFiles) {
+                    if (toggleFilesText) {
+                        toggleFilesText.textContent = (currentLang === 'en') ? 'Hide Other Files' : 'অন্যান্য ফাইল লুকান';
+                    }
+                    toggleBtn.classList.replace('btn-outline-primary', 'btn-outline-secondary');
+                } else {
+                    if (toggleFilesText) {
+                        toggleFilesText.textContent = (currentLang === 'en') ? 'View All Files' : 'সব ফাইল দেখুন';
+                    }
+                    toggleBtn.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+                }
+            });
+        }
+
+        // 📲 3. Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('{% static "sw.js" %}')
+                .then(() => console.log('Service Worker Registered Successfully.'))
+                .catch(err => console.log('Service Worker Registration Failed:', err));
+        }
+
+        // 📲 4. PWA Installation Trigger Logic
+        let deferredPrompt;
+        const pwaBanner = document.getElementById('pwaInstallBanner');
+        const pwaBtn = document.getElementById('pwaInstallBtn');
+
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            if (pwaBanner) pwaBanner.classList.add('d-none');
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (pwaBanner) {
+                pwaBanner.classList.remove('d-none');
+            }
+        });
+
+        if (pwaBtn) {
+            pwaBtn.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            if (pwaBanner) pwaBanner.classList.add('d-none');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    const manualModal = new bootstrap.Modal(document.getElementById('manualInstallModal'));
+                    manualModal.show();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

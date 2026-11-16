@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নতুন গ্রাহক নিবন্ধন - Kahaf Computer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>body { background-color: #f8f9fa; }</style>
+</head>
+<body class="py-4">
+    <div class="container">
+        <div class="card shadow-lg border-0" style="max-width: 700px; margin: auto; border-radius: 15px;">
+            <div class="card-header bg-dark text-white text-center py-3" style="border-radius: 15px 15px 0 0;">
+                <h4 class="fw-bold mb-0"><i class="fa-solid fa-user-plus me-2"></i>নতুন গ্রাহক নিবন্ধন ফরম</h4>
+            </div>
+            
+            <div class="card-body p-4">
+                {% if messages %}
+                    {% for m in messages %}<div class="alert alert-danger">{{ m }}</div>{% endfor %}
+                {% endif %}
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-address-card me-2"></i>প্রাথমিক তথ্য</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="fw-bold">নিবন্ধন ফরম আইডি</label>
+                            <input type="text" name="registration_id" class="form-control border-primary" placeholder="যেমন: KHC-001" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">মোবাইল নাম্বার</label>
+                            <input type="text" name="mobile_number" class="form-control" placeholder="01XXX..." required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="fw-bold">গ্রাহকের পূর্ণ নাম</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="fw-bold">সম্পূর্ণ ঠিকানা</label>
+                            <textarea name="address" class="form-control" rows="2" required></textarea>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-box-open me-2"></i>প্রোডাক্ট ও পেমেন্ট তথ্য</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="fw-bold">প্রোডাক্ট/সার্ভিস</label>
+                            <select name="product" class="form-select">
+                                <option value="">-- প্রোডাক্ট নির্বাচন করুন --</option>
+                                {% for p in products %}
+                                    <option value="{{ p.id }}">{{ p.name }} (৳{{ p.price }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">টাকার পরিমাণ (৳)</label>
+                            <input type="number" step="0.01" name="amount" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="fw-bold">পরিশোধের ধরন</label>
+                            <select name="payment_type" class="form-select" required>
+                                <option value="One-time">এককালীন</option>
+                                <option value="Monthly">মাসিক</option>
+                                <option value="Yearly">বাৎসরিক</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-primary mb-3"><i class="fa-solid fa-calendar-days me-2"></i>তারিখ ও অন্যান্য</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6 col-md-3">
+                            <label class="fw-bold small">নিবন্ধন মাস</label>
+                            <select name="registration_month" class="form-select" required>
+                                <option value="January">জানুয়ারি</option><option value="February">ফেব্রুয়ারি</option><option value="March">মার্চ</option>
+                                <option value="April">এপ্রিল</option><option value="May">মে</option><option value="June">জুন</option>
+                                <option value="July">জুলাই</option><option value="August">আগস্ট</option><option value="September">সেপ্টেম্বর</option>
+                                <option value="October">অক্টোবর</option><option value="November">নভেম্বর</option><option value="December">ডিসেম্বর</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="fw-bold small">নিবন্ধন বছর</label>
+                            <input type="number" name="registration_year" class="form-control" value="2024" required>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="fw-bold small">পরিশোধের মাস</label>
+                            <select name="payment_month" class="form-select" required>
+                                <option value="January">জানুয়ারি</option><option value="February">ফেব্রুয়ারি</option><option value="March">মার্চ</option>
+                                <option value="April">এপ্রিল</option><option value="May">মে</option><option value="June">জুন</option>
+                                <option value="July">জুলাই</option><option value="August">আগস্ট</option><option value="September">সেপ্টেম্বর</option>
+                                <option value="October">অক্টোবর</option><option value="November">নভেম্বর</option><option value="December">ডিসেম্বর</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="fw-bold small">পরিশোধের বছর</label>
+                            <input type="number" name="payment_year" class="form-control" value="2024" required>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label class="fw-bold">গ্রাহকের ছবি (ঐচ্ছিক)</label>
+                            <input type="file" name="photo" class="form-control" accept="image/*">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-3 fs-5 shadow-sm"><i class="fa-solid fa-check-circle me-2"></i>গ্রাহক নিবন্ধন সম্পন্ন করুন</button>
+                    <a href="{% url 'custom_admin_dashboard' %}" class="btn btn-outline-secondary w-100 mt-2 fw-bold">ড্যাশবোর্ডে ফিরে যান</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

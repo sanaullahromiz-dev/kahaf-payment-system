@@ -1,0 +1,370 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এডমিন ড্যাশবোর্ড - Kahaf Computer</title>
+    <!-- Bootstrap 5.3 & FontAwesome 6.4 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            background-color: #f3f4f6; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* 🌟 ব্র্যান্ড হেডার ও লোগো ডিজাইন */
+        .brand-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: #ffffff;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .brand-logo {
+            width: 65px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .slogan-text {
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            color: #e0e7ff;
+        }
+
+        /* 🌟 কার্ড ও বাটন ডিজাইন */
+        .stat-card { 
+            border-radius: 15px; 
+            border: none; 
+            transition: all 0.3s ease; 
+        }
+        .stat-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1) !important;
+        }
+        
+        .action-btn { 
+            border-radius: 12px; 
+            font-weight: 600; 
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .table-rounded { 
+            border-radius: 15px; 
+            overflow: hidden; 
+            border: none;
+        }
+
+        .customer-order-avatar {
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #0d6efd;
+            flex-shrink: 0;
+        }
+        
+        /* 📱 মোবাইল ফ্রেন্ডলি টেবিল স্টাইল */
+        @media (max-width: 576px) {
+            .table th, .table td {
+                font-size: 0.85rem;
+                padding: 10px 8px;
+            }
+            .brand-logo {
+                width: 50px;
+                height: 50px;
+            }
+            .brand-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 👑 ব্র্যান্ড হেডার সেকশন (লোগো, নাম ও স্লোগান সহ) -->
+    <header class="brand-header pt-3 pb-4 mb-4 shadow">
+        <div class="container">
+            <!-- টপ বার (ন্যাভিগেশন বাটন) -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="badge bg-light text-primary fw-bold px-3 py-2 rounded-pill shadow-sm">
+                    <i class="fa-solid fa-user-shield me-1"></i> এডমিন প্যানেল
+                </span>
+                <div>
+                    <a href="/django-admin/" class="btn btn-sm btn-light text-primary fw-bold rounded-pill me-1">
+                        <i class="fa-solid fa-gear me-1"></i> মূল এডমিন
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-sm btn-danger rounded-pill" title="লগআউট">
+                        <i class="fa-solid fa-power-off"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- লোগো ও ব্র্যান্ড নেম -->
+            <div class="d-flex align-items-center gap-3 mt-2">
+                <img src="{% static 'admin.png' %}?v=2" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3659/3659898.png';" alt="Kahaf Computer Logo" class="brand-logo bg-white">
+                <div>
+                    <h2 class="fw-bold mb-0 text-white brand-title">Kahaf Computer</h2>
+                    <p class="slogan-text mb-0 fw-semibold text-warning">
+                        <i class="fa-solid fa-microchip me-1"></i> Empowering Your Digital Future
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 📱 মূল কন্টেন্ট কনটেইনার -->
+    <div class="container pb-5">
+        
+        <!-- 🔔 মেসেজ অ্যালার্ট -->
+        {% if messages %}
+            {% for m in messages %}
+                <div class="alert alert-success alert-dismissible fade show text-center fw-bold shadow-sm rounded-4 mb-4">
+                    <i class="fa-solid fa-circle-check me-2"></i>{{ m }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- 📊 ১. সামারি কার্ডস (স্ট্যাটিস্টিক্স) -->
+        <div class="row g-3 mb-4">
+            <div class="col-4">
+                <div class="card stat-card bg-primary text-white shadow-sm p-3 text-center h-100">
+                    <i class="fa-solid fa-users fs-3 mb-1"></i>
+                    <h4 class="fw-bold mb-0">{{ total_customers }}</h4>
+                    <small class="d-none d-sm-inline">মোট গ্রাহক</small>
+                    <small class="d-sm-none" style="font-size: 0.75rem;">গ্রাহক</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card stat-card bg-success text-white shadow-sm p-3 text-center h-100">
+                    <i class="fa-solid fa-file-invoice-dollar fs-3 mb-1"></i>
+                    <h4 class="fw-bold mb-0">{{ total_sales }}</h4>
+                    <small class="d-none d-sm-inline">মোট বিক্রি রশিদ</small>
+                    <small class="d-sm-none" style="font-size: 0.75rem;">বিক্রি</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card stat-card bg-warning text-dark shadow-sm p-3 text-center h-100">
+                    <i class="fa-solid fa-clock-rotate-left fs-3 mb-1"></i>
+                    <h4 class="fw-bold mb-0">{{ pending_payments|length }}</h4>
+                    <small class="d-none d-sm-inline">অপেক্ষমান পেমেন্ট</small>
+                    <small class="d-sm-none" style="font-size: 0.75rem;">অপেক্ষমান</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- ⚡ ২. কুইক একশন বাটন সেকশন -->
+        <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-bolt text-warning me-2"></i>দ্রুত পদক্ষেপ (Quick Actions)</h6>
+        <div class="row g-2 g-md-3 mb-4">
+            <div class="col-6 col-md-3">
+                <a href="{% url 'create_sales_receipt' %}" class="btn btn-primary w-100 py-3 action-btn shadow-sm text-decoration-none">
+                    <i class="fa-solid fa-cart-plus fs-5"></i>
+                    <span>রশিদ তৈরি</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'admin_add_customer' %}" class="btn btn-dark w-100 py-3 action-btn shadow-sm text-decoration-none">
+                    <i class="fa-solid fa-user-plus fs-5 text-success"></i>
+                    <span>নতুন গ্রাহক</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'admin_customer_list' %}" class="btn btn-info text-dark w-100 py-3 action-btn shadow-sm text-decoration-none fw-bold">
+                    <i class="fa-solid fa-users-viewfinder fs-5"></i>
+                    <span>গ্রাহক তালিকা</span>
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a href="{% url 'admin_send_file' %}" class="btn btn-purple bg-secondary text-white w-100 py-3 action-btn shadow-sm text-decoration-none">
+                    <i class="fa-solid fa-paper-plane fs-5 text-warning"></i>
+                    <span>ফাইল পাঠান</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- 🛒 নতুন: গ্রাহকদের প্রোডাক্ট অর্ডার অনুরোধসমূহ (গ্রাহকের ছবি ও নামসহ) -->
+        <div class="card shadow-sm border-0 mb-4 table-rounded border-start border-success border-4">
+            <div class="card-header bg-white border-bottom pt-3 pb-2 d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold text-success mb-0">
+                    <i class="fa-solid fa-cart-arrow-down me-2"></i>নতুন প্রোডাক্ট অর্ডার অনুরোধসমূহ
+                </h6>
+                {% if order_requests %}
+                    <span class="badge bg-success rounded-pill px-3">{{ order_requests|length }} টি নতুন</span>
+                {% endif %}
+            </div>
+            <div class="card-body p-3">
+                {% for req in order_requests %}
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 p-3 mb-2 rounded-4 bg-light border">
+                    <div class="d-flex align-items-center gap-3">
+                        {% if req.customer.photo %}
+                            <img src="{{ req.customer.photo.url }}" alt="{{ req.customer.name }}" class="customer-order-avatar">
+                        {% else %}
+                            <div class="customer-order-avatar bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-4">
+                                {{ req.customer.name|first }}
+                            </div>
+                        {% endif %}
+                        <div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <strong class="text-dark fs-6">{{ req.customer.name }}</strong>
+                                <span class="badge bg-secondary">ID: {{ req.customer.registration_id }}</span>
+                                <small class="text-muted"><i class="fa-solid fa-phone me-1"></i>{{ req.customer.mobile_number }}</small>
+                            </div>
+                            <div class="mt-1">
+                                <span class="text-muted small">অর্ডারকৃত প্রোডাক্ট:</span>
+                                <span class="badge fs-6 fw-bold px-3 py-2 text-wrap text-start" style="background-color: #d1fae5; color: #065f46; border: 1px solid #10b981;">
+                                    {{ req.product_name }}
+                                </span>
+                            </div>
+                            <small class="text-muted d-block mt-1"><i class="fa-regular fa-clock me-1"></i>{{ req.created_at|date:"d M, Y - h:i A" }}</small>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 ms-auto">
+                        <a href="{% url 'admin_customer_profile' req.customer.id %}" class="btn btn-sm btn-outline-primary rounded-pill fw-bold px-3">
+                            <i class="fa-solid fa-user me-1"></i>প্রোফাইল
+                        </a>
+                        <form method="POST" action="" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="resolve_order_id" value="{{ req.id }}">
+                            <button type="submit" class="btn btn-sm btn-success rounded-pill fw-bold px-3" onclick="return confirm('গ্রাহকের সাথে আলোচনা সম্পন্ন হয়েছে? এটি তালিকা থেকে সরানো হবে।');">
+                                <i class="fa-solid fa-check-double me-1"></i>সম্পন্ন
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-3 text-muted">
+                    <p class="mb-0 small">বর্তমানে কোনো নতুন প্রোডাক্ট অর্ডারের অনুরোধ নেই।</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ⏳ ৩. পেন্ডিং পেমেন্ট লিস্ট -->
+        <div class="card shadow-sm border-0 mb-4 table-rounded">
+            <div class="card-header bg-white border-bottom-0 pt-3 pb-2">
+                <h6 class="fw-bold text-danger mb-0"><i class="fa-solid fa-spinner fa-spin me-2"></i>অপেক্ষমান পেমেন্ট (ভেরিফাই করুন)</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>গ্রাহক</th>
+                                <th>টাকা</th>
+                                <th>TrxID</th>
+                                <th class="text-end">অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in pending_payments %}
+                            <tr>
+                                <td>
+                                    <strong class="text-primary d-block">{{ p.customer.name }}</strong>
+                                    <small class="text-muted">{{ p.product_name }}</small>
+                                </td>
+                                <td>
+                                    <strong class="text-success">৳{{ p.paid_amount }}</strong><br>
+                                    <span class="badge bg-light text-dark border">{{ p.payment_method }}</span>
+                                </td>
+                                <td><span class="badge bg-secondary font-monospace">{{ p.transaction_id }}</span></td>
+                                <td class="text-end">
+                                    <a href="{% url 'verify_payment' p.id %}" class="btn btn-sm btn-success fw-bold px-3 rounded-pill" onclick="return confirm('পেমেন্টটি ভেরিফাই করবেন?');">
+                                        <i class="fa-solid fa-check me-1"></i>ভেরিফাই
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center py-4 text-muted"><p class="mb-0">কোনো অপেক্ষমান পেমেন্ট নেই!</p></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📁 ৪. গ্রাহকদের পাঠানো ফাইল/প্রজেক্ট সমূহ -->
+        <div class="card shadow-sm border-0 table-rounded mt-4">
+            <div class="card-header bg-white border-bottom-0 pt-3 pb-2">
+                <h6 class="fw-bold text-info mb-0"><i class="fa-solid fa-cloud-arrow-down me-2"></i>গ্রাহকদের পাঠানো ফাইল/প্রজেক্ট সমূহ</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ফাইলের বিবরণ</th>
+                                <th>গ্রাহক</th>
+                                <th>তারিখ</th>
+                                <th class="text-end">অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            {% for f in received_files %}
+                                {% if forloop.first %}
+                                <tr>
+                                    <td><strong class="text-dark">{{ f.title }}</strong></td>
+                                    <td><span class="badge bg-info text-dark">{{ f.customer.name }}</span></td>
+                                    <td><small class="text-muted">{{ f.created_at|date:"d M, Y" }}</small></td>
+                                    <td class="text-end">
+                                        <a href="{{ f.file.url }}" target="_blank" class="btn btn-sm btn-outline-success me-1" title="দেখুন"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="{{ f.file.url }}" download class="btn btn-sm btn-outline-primary" title="ডাউনলোড"><i class="fa-solid fa-download"></i></a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% empty %}
+                                <tr><td colspan="4" class="text-center py-4 text-muted"><p class="mb-0">গ্রাহক থেকে কোনো ফাইল আসেনি।</p></td></tr>
+                            {% endfor %}
+                        </tbody>
+
+                        {% if received_files|length > 1 %}
+                        <tbody class="collapse" id="hiddenAdminExtraFiles">
+                            {% for f in received_files %}
+                                {% if not forloop.first %}
+                                <tr>
+                                    <td><strong class="text-dark">{{ f.title }}</strong></td>
+                                    <td><span class="badge bg-info text-dark">{{ f.customer.name }}</span></td>
+                                    <td><small class="text-muted">{{ f.created_at|date:"d M, Y" }}</small></td>
+                                    <td class="text-end">
+                                        <a href="{{ f.file.url }}" target="_blank" class="btn btn-sm btn-outline-success me-1"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="{{ f.file.url }}" download class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-download"></i></a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                        
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-center py-3 bg-light border-0">
+                                    <button class="btn btn-sm btn-outline-info rounded-pill px-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#hiddenAdminExtraFiles" aria-expanded="false" aria-controls="hiddenAdminExtraFiles">
+                                        <i class="fa-solid fa-layer-group me-1"></i> সকল ফাইল দেখুন / লুকান
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        {% endif %}
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

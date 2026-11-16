@@ -19,8 +19,11 @@ ALLOWED_HOSTS = ['*']
 
 # রেন্ডারে লগইন ও ফর্ম সাবমিট করার সময় CSRF এরর এড়াতে
 CSRF_TRUSTED_ORIGINS = [
+    'https://payment-3dk6.onrender.com',
     'https://*.onrender.com',
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 INSTALLED_APPS = [

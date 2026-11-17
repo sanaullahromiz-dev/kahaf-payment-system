@@ -1,43 +1,269 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>লগইন - Zarif Pay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>লগইন - Kahaf Pay</title>
+    
+    <!-- Bootstrap 5 & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="{% static 'manifest.json' %}?v=3">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="{% static 'admin.png' %}?v=3">
+
     <style>
-        body { background: #eef2f3; }
-        .login-card { max-width: 420px; border-radius: 15px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-banner {
+            background: linear-gradient(135deg, #090d16 0%, #172554 65%, #0f766e 100%);
+            color: #ffffff;
+            padding: 22px 18px 20px;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid #38bdf8;
+        }
+
+        .brand-logo-box {
+            width: 58px;
+            height: 58px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 4px;
+            margin: 0 auto 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .brand-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 0.3px;
+            color: #ffffff;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: #7dd3fc;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .auth-body {
+            padding: 20px 20px 18px;
+        }
+
+        .form-label-custom {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .input-group-custom {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon-left {
+            position: absolute;
+            left: 13px;
+            color: #64748b;
+            font-size: 0.9rem;
+            z-index: 4;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            border-radius: 12px;
+            padding: 10px 38px 10px 38px;
+            font-size: 0.9rem;
+            border: 1.5px solid #cbd5e1;
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: all 0.2s ease;
+        }
+
+        .form-control-custom:focus {
+            background-color: #ffffff;
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+        }
+
+        .toggle-pass-btn {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 4;
+        }
+
+        .btn-login-submit {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 11px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+            transition: transform 0.15s ease;
+        }
+
+        .btn-login-submit:active {
+            transform: scale(0.98);
+        }
+
+        .support-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-top: 14px;
+            text-align: center;
+        }
     </style>
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card login-card p-4 w-100">
-        <h3 class="text-center fw-bold text-primary mb-3">Zarif Pay</h3>
-        <p class="text-center text-muted small mb-4">আপনার অ্যাকাউন্টে প্রবেশ করতে মোবাইল ও পাসওয়ার্ড দিন</p>
-        
-        {% if messages %}
-            {% for m in messages %}
-                <div class="alert alert-danger p-2 text-center small">{{ m }}</div>
-            {% endfor %}
-        {% endif %}
+<body>
 
-        <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label fw-bold">মোবাইল নাম্বার</label>
-                <input type="text" name="mobile_number" class="form-control" placeholder="017xxxxxxxx" required>
+    <div class="auth-wrapper">
+        <!-- 🌟 Top Brand Header -->
+        <div class="auth-banner">
+            <div class="brand-logo-box">
+                <img src="{% static 'admin.png' %}?v=3" alt="Kahaf Pay Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5404/5404900.png'">
             </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold">পাসওয়ার্ড</label>
-                <input type="password" name="password" class="form-control" placeholder="******" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mb-3">লগইন করুন</button>
-        </form>
+            <h1 class="brand-name">Kahaf Pay</h1>
+            <span class="brand-tagline">Kahaf Computer — গ্রাহক পোর্টাল</span>
+        </div>
 
-        <div class="text-center mt-3 border-top pt-3">
-            <p class="mb-1 small">নতুন গ্রাহক হলে? <a href="{% url 'register' %}" class="fw-bold text-decoration-none">একাউন্ট তৈরি করুন</a></p>
-            <small class="text-muted">একাউন্ট তৈরিতে সমস্যা হলে এডমিনের সাথে যোগাযোগ করুন।</small>
+        <!-- 🔐 Login Form Body -->
+        <div class="auth-body">
+            <p class="text-center text-muted mb-3" style="font-size: 0.8rem;">
+                আপনার অ্যাকাউন্টে প্রবেশ করতে মোবাইল নাম্বার ও পাসওয়ার্ড দিন
+            </p>
+
+            <!-- Smart Alert Messages (Success = Green, Warning = Yellow, Error = Red) -->
+            {% if messages %}
+                {% for m in messages %}
+                    <div class="alert {% if 'success' in m.tags %}alert-success border-success{% elif 'warning' in m.tags %}alert-warning border-warning{% else %}alert-danger border-danger{% endif %} py-2 px-3 rounded-3 text-center fw-semibold mb-3" style="font-size: 0.8rem;">
+                        {% if 'success' in m.tags %}
+                            <i class="fa-solid fa-circle-check me-1"></i>
+                        {% else %}
+                            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+                        {% endif %}
+                        {{ m }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label-custom">মোবাইল নাম্বার</label>
+                    <div class="input-group-custom">
+                        <i class="fa-solid fa-phone input-icon-left"></i>
+                        <input type="tel" name="mobile_number" class="form-control-custom" placeholder="017xxxxxxxx" autocomplete="tel" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label-custom">পাসওয়ার্ড</label>
+                    <div class="input-group-custom">
+                        <i class="fa-solid fa-lock input-icon-left"></i>
+                        <input type="password" name="password" id="loginPassword" class="form-control-custom" placeholder="আপনার পাসওয়ার্ড লিখুন" autocomplete="current-password" required>
+                        <button type="button" class="toggle-pass-btn" onclick="togglePassword('loginPassword', 'loginEyeIcon')">
+                            <i class="fa-regular fa-eye" id="loginEyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login-submit mt-1">
+                    <i class="fa-solid fa-right-to-bracket me-1"></i> লগইন করুন
+                </button>
+            </form>
+
+            <!-- Register & Admin Help Section -->
+            <div class="text-center mt-3 pt-2 border-top">
+                <p class="mb-0" style="font-size: 0.84rem; color: #334155;">
+                    নতুন গ্রাহক হলে? 
+                    <a href="{% url 'register' %}" class="fw-bold text-primary text-decoration-none">
+                        একাউন্ট তৈরি করুন <i class="fa-solid fa-arrow-right ms-1" style="font-size: 0.75rem;"></i>
+                    </a>
+                </p>
+            </div>
+
+            <div class="support-box">
+                <small class="text-muted d-block mb-1" style="font-size: 0.74rem;">
+                    একাউন্ট তৈরিতে বা লগইনে সমস্যা হলে এডমিনের সাথে যোগাযোগ করুন
+                </small>
+                <a href="https://wa.me/message/H5OFP5WIMQMKE1" target="_blank" class="btn btn-sm btn-outline-success rounded-pill fw-bold px-3 py-1" style="font-size: 0.75rem;">
+                    <i class="fa-brands fa-whatsapp me-1"></i> হোয়াটসঅ্যাপ সাপোর্ট
+                </a>
+            </div>
         </div>
     </div>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>

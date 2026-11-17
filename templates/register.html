@@ -1,49 +1,294 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>একাউন্ট তৈরি করুন - Zarif Pay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>একাউন্ট তৈরি করুন - Kahaf Pay</title>
+    
+    <!-- Bootstrap 5 & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- PWA Manifest & Icons -->
+    <link rel="manifest" href="{% static 'manifest.json' %}?v=3">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="{% static 'admin.png' %}?v=3">
+
     <style>
-        body { background: #eef2f3; }
-        .reg-card { max-width: 450px; border-radius: 15px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 410px;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-banner {
+            background: linear-gradient(135deg, #090d16 0%, #064e3b 65%, #059669 100%);
+            color: #ffffff;
+            padding: 18px 16px 16px;
+            text-align: center;
+            border-bottom: 2px solid #34d399;
+        }
+
+        .brand-logo-box {
+            width: 50px;
+            height: 50px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 3px;
+            margin: 0 auto 8px;
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .brand-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .brand-tagline {
+            font-size: 0.74rem;
+            color: #a7f3d0;
+            margin-top: 2px;
+            display: block;
+        }
+
+        .auth-body {
+            padding: 18px 18px 16px;
+        }
+
+        .form-label-custom {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .input-group-custom {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon-left {
+            position: absolute;
+            left: 12px;
+            color: #64748b;
+            font-size: 0.88rem;
+            z-index: 4;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            border-radius: 11px;
+            padding: 9px 36px 9px 36px;
+            font-size: 0.88rem;
+            border: 1.5px solid #cbd5e1;
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: all 0.2s ease;
+        }
+
+        .form-control-custom:focus {
+            background-color: #ffffff;
+            border-color: #059669;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.14);
+        }
+
+        .toggle-pass-btn {
+            position: absolute;
+            right: 11px;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 0.88rem;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 4;
+        }
+
+        .btn-reg-submit {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 11px;
+            font-size: 0.94rem;
+            font-weight: 700;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3);
+            transition: transform 0.15s ease;
+        }
+
+        .btn-reg-submit:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card reg-card p-4 w-100 my-4">
-        <h4 class="text-center fw-bold text-success mb-3">নতুন একাউন্ট তৈরি করুন</h4>
-        
-        {% if messages %}
-            {% for m in messages %}
-                <div class="alert alert-warning p-2 text-center small">{{ m }}</div>
-            {% endfor %}
-        {% endif %}
+<body>
 
-        <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label fw-bold">নিবন্ধন ফরম আইডি</label>
-                <input type="text" name="registration_id" class="form-control" placeholder="যেমন: REG-101" required>
+    <div class="auth-wrapper">
+        <!-- 🌟 Top Brand Header -->
+        <div class="auth-banner">
+            <div class="brand-logo-box">
+                <img src="{% static 'admin.png' %}?v=3" alt="Kahaf Pay Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5404/5404900.png'">
             </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold">মোবাইল নাম্বার</label>
-                <input type="text" name="mobile_number" class="form-control" placeholder="017xxxxxxxx" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold">পাসওয়ার্ড</label>
-                <input type="password" name="password" class="form-control" placeholder="******" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold">পাসওয়ার্ড পুনরায় দিন</label>
-                <input type="password" name="confirm_password" class="form-control" placeholder="******" required>
-            </div>
-            <button type="submit" class="btn btn-success w-100 fw-bold py-2">একাউন্ট তৈরি করুন</button>
-        </form>
+            <h1 class="brand-name">Kahaf Pay</h1>
+            <span class="brand-tagline">নতুন গ্রাহক অ্যাকাউন্ট তৈরি করুন</span>
+        </div>
 
-        <div class="text-center mt-3">
-            <a href="{% url 'login' %}" class="small text-decoration-none">পূর্বেই একাউন্ট রয়েছে? লগইন করুন</a>
+        <!-- 📝 Registration Form Body -->
+        <div class="auth-body">
+
+            <!-- Backend Alert Messages -->
+            {% if messages %}
+                {% for m in messages %}
+                    <div class="alert {% if 'success' in m.tags %}alert-success border-success{% else %}alert-danger border-danger{% endif %} py-2 px-3 rounded-3 text-center fw-semibold mb-3" style="font-size: 0.79rem;">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i> {{ m }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Instant Client-Side Validation Alert -->
+            <div id="clientErrorAlert" class="alert alert-danger border-danger py-2 px-3 rounded-3 text-center fw-semibold mb-3 d-none" style="font-size: 0.79rem;">
+                <i class="fa-solid fa-circle-exclamation me-1"></i>
+                <span id="clientErrorText"></span>
+            </div>
+
+            <form method="POST" id="registerForm" autocomplete="off">
+                {% csrf_token %}
+                
+                <div class="mb-2">
+                    <label class="form-label-custom">নিবন্ধন ফরম আইডি (Registration ID)</label>
+                    <div class="input-group-custom">
+                        <i class="fa-solid fa-id-badge input-icon-left"></i>
+                        <input type="text" name="registration_id" id="regIdInput" class="form-control-custom" placeholder="যেমন: 01 বা REG-101" autocomplete="off" required>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label-custom">মোবাইল নাম্বার</label>
+                    <div class="input-group-custom">
+                        <i class="fa-solid fa-phone input-icon-left"></i>
+                        <input type="tel" name="mobile_number" id="regMobileInput" class="form-control-custom" placeholder="017xxxxxxxx" autocomplete="new-tel" required>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label-custom">নতুন পাসওয়ার্ড</label>
+                    <div class="input-group-custom">
+                        <i class="fa-solid fa-lock input-icon-left"></i>
+                        <input type="password" name="password" id="regPassword" class="form-control-custom" placeholder="কমপক্ষে ৪ ডিজিটের পাসওয়ার্ড" autocomplete="new-password" required>
+                        <button type="button" class="toggle-pass-btn" onclick="togglePassword('regPassword', 'regEye1')">
+                            <i class="fa-regular fa-eye" id="regEye1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label-custom">পাসওয়ার্ড পুনরায় দিন</label>
+                    <div class="input-group-custom">
+                        <i class="fa-solid fa-shield-check input-icon-left"></i>
+                        <input type="password" name="confirm_password" id="regConfirmPassword" class="form-control-custom" placeholder="পাসওয়ার্ডটি আবার লিখুন" autocomplete="new-password" required>
+                        <button type="button" class="toggle-pass-btn" onclick="togglePassword('regConfirmPassword', 'regEye2')">
+                            <i class="fa-regular fa-eye" id="regEye2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-reg-submit">
+                    <i class="fa-solid fa-user-plus me-1"></i> একাউন্ট তৈরি করুন
+                </button>
+            </form>
+
+            <div class="text-center mt-3 pt-2 border-top">
+                <p class="mb-1" style="font-size: 0.83rem; color: #334155;">
+                    পূর্বেই একাউন্ট রয়েছে? 
+                    <a href="{% url 'login' %}" class="fw-bold text-success text-decoration-none">
+                        লগইন করুন <i class="fa-solid fa-right-to-bracket ms-1" style="font-size: 0.75rem;"></i>
+                    </a>
+                </p>
+                <a href="https://wa.me/message/H5OFP5WIMQMKE1" target="_blank" class="text-muted text-decoration-none d-inline-block mt-1" style="font-size: 0.74rem;">
+                    <i class="fa-brands fa-whatsapp text-success me-1"></i> আইডি জানা না থাকলে এডমিনের সাথে যোগাযোগ করুন
+                </a>
+            </div>
         </div>
     </div>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Instant Validation Before Form Submit
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const mobile = document.getElementById('regMobileInput').value.trim();
+            const pass1 = document.getElementById('regPassword').value;
+            const pass2 = document.getElementById('regConfirmPassword').value;
+            const errorAlert = document.getElementById('clientErrorAlert');
+            const errorText = document.getElementById('clientErrorText');
+
+            if (mobile.length < 11) {
+                e.preventDefault();
+                errorText.textContent = "সঠিক ১১ ডিজিটের মোবাইল নাম্বার দিন!";
+                errorAlert.classList.remove('d-none');
+                return;
+            }
+
+            if (pass1 !== pass2) {
+                e.preventDefault();
+                errorText.textContent = "পাসওয়ার্ড এবং পুনরায় দেওয়া পাসওয়ার্ড মিলছে না!";
+                errorAlert.classList.remove('d-none');
+                return;
+            }
+
+            errorAlert.classList.add('d-none');
+        });
+    </script>
 </body>
 </html>

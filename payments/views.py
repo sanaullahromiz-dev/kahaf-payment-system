@@ -14,8 +14,8 @@ def customer_login(request):
         return redirect('dashboard')
         
     if request.method == 'POST':
-        mobile = request.POST.get('mobile_number')
-        password = request.POST.get('password')
+        mobile = request.POST.get('mobile_number', '').strip()
+        password = request.POST.get('password', '')
         
         user = authenticate(request, username=mobile, password=password)
         if user is not None:
@@ -24,34 +24,35 @@ def customer_login(request):
                 return redirect('custom_admin_dashboard')
             return redirect('dashboard')
         else:
-            messages.error(request, "মোবাইল নাম্বার অথবা পাসওয়ার্ড ভুল হয়েছে!")
+            messages.error(request, "মোবাইল নাম্বার অথবা পাসওয়ার্ড মিলছে না!")
             
     return render(request, 'login.html')
 
 # 👤 গ্রাহক রেজিস্ট্রেশন
 def customer_register(request):
     if request.method == 'POST':
-        reg_id = request.POST.get('registration_id')
-        mobile = request.POST.get('mobile_number')
-        password = request.POST.get('password')
+        reg_id = request.POST.get('registration_id', '').strip()
+        mobile = request.POST.get('mobile_number', '').strip()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
         
-        if password != request.POST.get('confirm_password'):
-            messages.error(request, "পাসওয়ার্ড মিলেনি!")
+        if password != confirm_password:
+            messages.error(request, "পাসওয়ার্ড এবং পুনরায় দেওয়া পাসওয়ার্ড মিলছে না!")
             return redirect('register')
             
-        profile = CustomerRegistration.objects.filter(registration_id=reg_id, mobile_number=mobile).first()
+        profile = CustomerRegistration.objects.filter(registration_id__iexact=reg_id, mobile_number=mobile).first()
         if not profile:
-            messages.error(request, "নিবন্ধন তথ্য পাওয়া যায়নি!")
+            messages.error(request, "নিবন্ধন ফরম আইডি বা মোবাইল নাম্বার মিলছে না! সঠিক তথ্য দিন।")
             return redirect('register')
             
-        if profile.user:
-            messages.warning(request, "একাউন্ট আগেই তৈরি করা আছে!")
+        if profile.user or User.objects.filter(username=mobile).exists():
+            messages.warning(request, "এই মোবাইল নাম্বার দিয়ে আগেই একাউন্ট তৈরি করা আছে! এখন লগইন করুন।")
             return redirect('login')
             
         user = User.objects.create_user(username=mobile, password=password)
         profile.user = user
         profile.save()
-        messages.success(request, "একাউন্ট সফলভাবে তৈরি হয়েছে!")
+        messages.success(request, "একাউন্ট সফলভাবে তৈরি হয়েছে! এখন লগইন করুন।")
         return redirect('login')
         
     return render(request, 'register.html')

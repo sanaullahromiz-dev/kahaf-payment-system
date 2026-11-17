@@ -1,23 +1,32 @@
 {
-  "name": "Kahaf Computer With Software Creator",
-  "short_name": "Kahaf Tech",
-  "description": "Customer Dashboard for Kahaf Computer",
+  "id": "/",
+  "name": "Kahaf Computer - Customer Portal",
+  "short_name": "Kahaf Pay",
+  "description": "Customer Dashboard & Payment Portal for Kahaf Computer",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#1e3c72",
-  "theme_color": "#1e3c72",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "/static/admin.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/static/admin.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/static/admin.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

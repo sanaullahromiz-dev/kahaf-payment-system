@@ -1,13 +1,16 @@
-// Basic Service Worker
+const CACHE_NAME = 'kahaf-pay-v2';
+
 self.addEventListener('install', (event) => {
-    console.log('Service Worker Installed');
     self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-    console.log('Service Worker Activated');
+    event.waitUntil(clients.claim());
 });
 
 self.addEventListener('fetch', (event) => {
-    // Normal network requests
+    if (event.request.method !== 'GET') return;
+    event.respondWith(
+        fetch(event.request).catch(() => caches.match(event.request))
+    );
 });

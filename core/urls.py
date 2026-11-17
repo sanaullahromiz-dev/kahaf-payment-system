@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 urlpatterns = [
     # ডিফল্ট জ্যাঙ্গো এডমিন (নিরাপত্তার জন্য নাম পরিবর্তন করা হলো)
@@ -12,6 +13,9 @@ urlpatterns = [
     
     # আপনার কাস্টম এডমিন রাউট (সবগুলো admin-panel/ দিয়ে শুরু হবে)
     path('admin-panel/', include('admin_dashboard.urls')),
+
+    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/javascript'), name='sw.js'),
+
 ]
 
 # প্রোডাকশন এবং ডেভেলপমেন্টে মিডিয়া ফাইলগুলো সঠিকভাবে দেখানোর জন্য

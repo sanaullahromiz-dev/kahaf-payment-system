@@ -123,7 +123,7 @@ def profile_dashboard(request):
         'profile': profile,
         'receipts': receipts,
         'dues': dues,
-        'has_new_receipt': has_new_receipt or notifications.filter(is_read=False).exists(),
+        'has_new_receipt': has_new_receipt or any(not n.is_read for n in notifications),
         'notifications': notifications,
         'customer_files': customer_files,
     }
